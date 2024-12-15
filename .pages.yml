@@ -1,0 +1,3 @@
+media:
+  input: public/media
+  output: media
