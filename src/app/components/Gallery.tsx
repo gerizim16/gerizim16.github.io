@@ -25,7 +25,13 @@ export default function Gallery() {
   const masonryRef = useRef<Masonry>(null);
   const sizerRef = useRef<HTMLDivElement>(null);
 
-  const [width, setWidth] = useState<number>();
+  const [maxWidth, setMaxWidth] = useState(
+    containerRef.current?.clientWidth ?? NaN,
+  );
+  const [maxHeight, setMaxHeight] = useState(window.innerHeight);
+  const [width, setWidth] = useState<number | undefined>(
+    sizerRef.current?.offsetWidth,
+  );
   const [expandedSrc, setExpandedSrc] = useState<string>();
 
   useEffect(() => {
@@ -36,17 +42,20 @@ export default function Gallery() {
         columnWidth: ".item-width",
         gutter: gap,
         resize: false,
+        transitionDuration: "0.3s",
       });
     })();
   }, []);
 
   useLayoutEffect(() => {
-    const getwidth = () => {
+    const getMeasurements = () => {
+      setMaxWidth(containerRef.current?.clientWidth ?? NaN);
+      setMaxHeight(window.innerHeight);
       setWidth(sizerRef.current?.offsetWidth);
     };
-    getwidth();
-    window.addEventListener("resize", getwidth);
-    return () => window.removeEventListener("resize", getwidth);
+    getMeasurements();
+    window.addEventListener("resize", getMeasurements);
+    return () => window.removeEventListener("resize", getMeasurements);
   }, []);
 
   useLayoutEffect(() => {
@@ -64,6 +73,8 @@ export default function Gallery() {
         <Item
           key={image.default.src}
           image={image}
+          maxWidth={maxWidth - gap * 2}
+          maxHeight={maxHeight - gap * 2}
           width={width}
           masonry={masonryRef}
           expanded={expandedSrc === image.default.src}
@@ -82,6 +93,8 @@ export default function Gallery() {
 
 interface ItemProps {
   image: StaticRequire;
+  maxWidth?: number;
+  maxHeight?: number;
   width?: number;
   masonry?: RefObject<Masonry | null>;
   expanded?: boolean;
@@ -90,25 +103,42 @@ interface ItemProps {
 
 function Item({
   image,
-  width: initialWidth = NaN,
+  maxWidth,
+  maxHeight,
+  width: initialWidth,
   masonry,
   expanded,
   onClick,
 }: ItemProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const width = useMemo(
-    () => (expanded ? initialWidth * 2 + gap : initialWidth),
-    [expanded, initialWidth],
-  );
-
   const aspectRatio = useMemo(
     () => image.default.width / image.default.height,
     [image],
   );
 
+  const expandedWidth = useMemo(() => {
+    if (!maxWidth || !maxHeight) return "auto";
+    if (maxWidth / aspectRatio > maxHeight) {
+      return maxHeight * aspectRatio;
+    } else {
+      return "100%";
+    }
+  }, [aspectRatio, maxHeight, maxWidth]);
+
+  const width = useMemo(
+    () => (expanded ? expandedWidth : initialWidth),
+    [expanded, expandedWidth, initialWidth],
+  );
+
   useLayoutEffect(() => {
     masonry?.current?.layout?.();
+    masonry?.current?.once?.("layoutComplete", () =>
+      ref.current?.scrollIntoView({
+        behavior: "smooth",
+        block: expanded ? "center" : "nearest",
+      }),
+    );
   }, [expanded, masonry]);
 
   return (
@@ -116,14 +146,16 @@ function Item({
       ref={ref}
       className="item group/image relative max-w-full cursor-pointer"
       style={{ width, aspectRatio, marginBottom: gap }}
-      onClick={onClick}
+      onClick={() => {
+        onClick?.();
+      }}
     >
       <Image
         src={image}
-        width={initialWidth * 2 + gap || 800}
-        height={800}
+        width={expanded ? maxWidth : initialWidth}
         alt=""
         quality={90}
+        placeholder="blur"
         className="transition-all"
         style={{ width }}
       />
