@@ -26,6 +26,7 @@ export default function Gallery() {
   const sizerRef = useRef<HTMLDivElement>(null);
 
   const [width, setWidth] = useState<number>();
+  const [expandedSrc, setExpandedSrc] = useState<string>();
 
   useEffect(() => {
     (async () => {
@@ -65,6 +66,14 @@ export default function Gallery() {
           image={image}
           width={width}
           masonry={masonryRef}
+          expanded={expandedSrc === image.default.src}
+          onClick={() =>
+            setExpandedSrc((currExpandedSrc) =>
+              currExpandedSrc === image.default.src
+                ? undefined
+                : image.default.src,
+            )
+          }
         />
       ))}
     </div>
@@ -75,12 +84,18 @@ interface ItemProps {
   image: StaticRequire;
   width?: number;
   masonry?: RefObject<Masonry | null>;
+  expanded?: boolean;
+  onClick?: () => void;
 }
 
-function Item({ image, width: initialWidth = NaN, masonry }: ItemProps) {
+function Item({
+  image,
+  width: initialWidth = NaN,
+  masonry,
+  expanded,
+  onClick,
+}: ItemProps) {
   const ref = useRef<HTMLDivElement>(null);
-
-  const [expanded, setExpanded] = useState(false);
 
   const width = useMemo(
     () => (expanded ? initialWidth * 2 + gap : initialWidth),
@@ -98,12 +113,10 @@ function Item({ image, width: initialWidth = NaN, masonry }: ItemProps) {
 
   return (
     <div
-        ref={ref}
+      ref={ref}
       className="item group/image relative max-w-full cursor-pointer"
-      onClick={() => {
-        setExpanded((e) => !e);
-      }}
       style={{ width, aspectRatio, marginBottom: gap }}
+      onClick={onClick}
     >
       <Image
         src={image}
