@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
-import { Quicksand } from 'next/font/google';
+import { Quicksand } from "next/font/google";
 
-import './globals.css';
+import "./globals.css";
 
 const quicksand = Quicksand({
-  variable: '--font-quicksand',
-  subsets: ['latin'],
+  variable: "--font-quicksand",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: 'Gerizim Villarante',
+  title: "Gerizim Villarante",
   description: "Gerizim Villarante's Portfolio",
 };
 
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${quicksand.variable} flex flex-col items-center font-sans antialiased`}
       >
-        <main className="max-w-screen-2xl w-full">{children}</main>
+        <main className="w-full">{children}</main>
       </body>
     </html>
   );

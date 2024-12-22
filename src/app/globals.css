@@ -2,14 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @layer base {
-  body {
-    color: var(--foreground);
-    background: var(--background);
+  html, body {
+    scrollbar-gutter: stable;
   }
 }
