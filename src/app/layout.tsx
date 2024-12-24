@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 
 import "./globals.css";
+import NavBar from "./components/Navbar";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -22,9 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${quicksand.variable} flex flex-col items-center font-sans antialiased`}
+        className={`${quicksand.variable} bg-neutral-100 font-sans antialiased`}
       >
-        <main className="w-full">{children}</main>
+        <div className="flex flex-col p-2 lg:flex-row">
+          <NavBar className="w-full self-start lg:w-min" />
+          <main className="relative grow">{children}</main>
+        </div>
       </body>
     </html>
   );

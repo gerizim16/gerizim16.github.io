@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  async redirects() {
+    return [{ source: "/", destination: "/photography", permanent: false }];
+  },
   webpack(config) {
     const fileLoaderRule = config.module.rules.find(
       (rule: { test: { test: (arg0: string) => boolean } }) =>
