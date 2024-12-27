@@ -40,3 +40,7 @@ export default async function Viewer({ params }: ViewerProps) {
     </div>
   );
 }
+
+export async function generateStaticParams() {
+  return images.map(({ default: { src } }) => ({ src }));
+}

@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   async redirects() {
     return [{ source: "/", destination: "/photography", permanent: false }];
   },
@@ -25,6 +24,12 @@ const nextConfig: NextConfig = {
     );
     fileLoaderRule.exclude = /\.svg$/i;
     return config;
+  },
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 0,
+    },
   },
 };
 

@@ -103,6 +103,7 @@ export default function Gallery() {
           }
           key={image.default.src}
           scroll={false}
+          className="item"
         >
           <Item
             ref={(e) => {
@@ -183,7 +184,7 @@ function Item({
   return (
     <div
       ref={ref}
-      className="item relative cursor-pointer"
+      className="relative cursor-pointer"
       style={{
         width,
         height,
@@ -198,15 +199,17 @@ function Item({
           transitionDuration,
         }}
       >
-        <Image
-          src={image}
-          width={internalWidth ?? initialWidth}
-          alt=""
-          quality={90}
-          placeholder="blur"
-          className="size-full"
-          priority={expanded}
-        />
+        {initialWidth && (
+          <Image
+            src={image}
+            width={internalWidth ?? initialWidth}
+            alt=""
+            quality={90}
+            placeholder="blur"
+            className="size-full"
+            priority={expanded}
+          />
+        )}
       </div>
     </div>
   );
