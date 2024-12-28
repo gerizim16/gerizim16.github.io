@@ -7,10 +7,11 @@ import importAll from "@/utils/importAll";
 import { StaticRequire } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import {
   Ref,
   RefObject,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -26,6 +27,7 @@ const images = importAll(
 ) as Array<StaticRequire>;
 
 export default function Gallery() {
+  const { refresh } = useRouter();
   const pathname = usePathname();
   const params = useParams<{ src?: string }>();
 
@@ -87,10 +89,14 @@ export default function Gallery() {
     });
   }, [expanded]);
 
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
   return (
     <div
       ref={containerRef}
-      className="relative grid w-full grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] xl:grid-cols-[repeat(auto-fill,_minmax(400px,_1fr))] 2xl:grid-cols-[repeat(auto-fill,_minmax(450px,_1fr))]"
+      className="relative grid w-full grid-cols-[repeat(auto-fill,_minmax(min(100%/3,_300px),_1fr))] xl:grid-cols-[repeat(auto-fill,_minmax(400px,_1fr))] 2xl:grid-cols-[repeat(auto-fill,_minmax(450px,_1fr))]"
       style={{ gap }}
     >
       <div ref={sizerRef} className="item-width" />
@@ -111,7 +117,7 @@ export default function Gallery() {
             }}
             key={image.default.src}
             image={image}
-            maxWidth={maxWidth - gap * 2}
+            maxWidth={maxWidth}
             maxHeight={maxHeight - gap * 2}
             className={twMerge(
               "after:absolute after:inset-0 after:bg-white after:bg-opacity-0 after:transition-all hover:after:opacity-0",
