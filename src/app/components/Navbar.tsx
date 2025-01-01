@@ -19,7 +19,7 @@ export default function NavBar({ className }: NavBarProps) {
   return (
     <StickyBox
       className={twMerge(
-        "flex flex-row items-baseline gap-4 py-2 lg:flex-col lg:items-stretch lg:pl-4 lg:pr-8",
+        "flex flex-row items-baseline gap-4 py-2 lg:flex-col lg:items-stretch lg:px-4",
         className,
       )}
       offsetTop={8}
@@ -28,10 +28,10 @@ export default function NavBar({ className }: NavBarProps) {
         Gerizim Villarante
       </h1>
       <div className="grow lg:grow-0" />
-      <ul className="flex flex-row items-end gap-2 text-lg lg:flex-col">
+      <ul className="flex flex-row items-end text-lg lg:flex-col">
         {Object.entries(links).map(([title, href]) => (
           <Link
-            className="transition-all hover:-translate-x-2"
+            className="py-1 transition-all hover:-translate-x-2"
             key={href}
             href={href}
             scroll={`/${segment}` !== href}
