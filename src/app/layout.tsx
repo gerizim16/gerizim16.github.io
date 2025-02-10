@@ -4,7 +4,6 @@ import { Quicksand } from "next/font/google";
 
 import "./globals.css";
 import Body from "./components/Body";
-import NavBar from "./components/Navbar";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -24,10 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Body className={`${quicksand.variable} font-sans antialiased`}>
-        <div className="relative isolate flex flex-col lg:flex-row">
-          <NavBar className="z-10 w-full self-start p-2 lg:w-min" />
-          <main className="relative grow p-2">{children}</main>
-        </div>
+        {children}
       </Body>
     </html>
   );
