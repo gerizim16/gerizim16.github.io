@@ -17,13 +17,11 @@ export default function Valentine() {
       <div className="text-center text-3xl">Mehehehe {":>"}</div>
       <p>luv u!</p>
       <div className="text-center">
-        <p className="mb-4">See you on Feb 14, 9AM @ my place.</p>
+        <p className="mb-4">See you on Feb 20 for our Elyu trip!</p>
         <p>
-          Wear something that can
-          <br />
-          match your black speedcat.
+          I miss ü!
         </p>
-        <p className="text-xs">Ako na magbook ng grab mo.</p>
+        <p className="text-xs">(also, see u earlier than feb 20, hopefully!)</p>
       </div>
     </div>
   );
